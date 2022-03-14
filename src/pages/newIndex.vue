@@ -12,14 +12,15 @@
 </template>
 
 <script setup lang="ts">
+import { useUP, MetaData } from '@/composables/ultimateProtocol';
 
-const meta = {
-  url: 'panchoblanco.com',
+const meta: MetaData = {
+  base_url: 'panchoblanco.com',
   title: 'Pancho Blanco :: Desarrollador Creativo',
   description:
           'Hola soy Pancho Blanco, un Desarrollador y Diseñador Grafico. Tengo mas de 4 años en la industria del desarrollo y tengo una pasion por enseñar y aprender.',
 }
-ultimateProtocol(meta)
+useHead(useUP(meta))
 
 </script>
 
