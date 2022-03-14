@@ -1,8 +1,7 @@
 <template>
-  <main :class="printMode ? 'print' : null" class="p-6 relative">
-    <!-- <nav>{{ $t('lang') }}</nav> -->
+  <main :class="print_mode ? 'print' : null" class="p-6 relative">
     <aside
-      v-if="!printMode"
+      v-if="!print_mode"
       class="flex flex-col sm:flex-row justify-between lg:justify-end mb-6 lang"
     >
       <div class="lg:hidden space-x-2">
@@ -10,22 +9,24 @@
           href="#exp"
           class="py-3 sm:py-0 hover:underline hover:text-violet-600"
           @click.prevent="scrollToElement('exp')"
-          >{{ $t('exp_title') }}</a
         >
+          {{ t('exp_title') }}
+        </a>
         <a
           href="#study"
           class="py-3 sm:py-0 hover:underline hover:text-violet-600"
           @click.prevent="scrollToElement('study')"
-          >{{ $t('study_title') }}</a
         >
+          {{ t('study_title') }}
+        </a>
       </div>
       <button
         class="hover:underline text-rigth flex items-center hover:text-violet-600 transition duration-200 ease-out"
         @click="changeLang()"
       >
-        <Icon icon="translate" class="w-5 h-5 mr-1" />
+        <i class="w-5 h-5 mr-1 i-ri:translate" />
         <span>
-          {{ $t('change_lang') }}
+          {{ t('change_lang') }}
         </span>
       </button>
     </aside>
@@ -37,51 +38,50 @@
       class="absolute bottom-0 right-0 m-8 rounded transform transition duration-200 shadow hover:scale-105 hover:-translate-y-2 hover:bg-violet-200 dark:hover:bg-violet-800 hover:shadow-md"
       @click="backToTop"
     >
-      <Icon icon="upload" weight="solid" class="m-3" />
+      <i class="m-3 i-ri:arrow-up-line" />
     </button>
   </main>
 </template>
 
-<script>
-import mediaCards from '@/mixins/media_cards'
-import { mapState } from 'vuex'
-export default {
-  mixins: [mediaCards],
-  data() {
-    return {
-      meta: {
-        url: 'panchoblanco.com/cv',
-        title: 'Curriculum Vitae :: Pancho Blanco',
-        description:
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useGeneralStore } from '~/stores'
+import { useUP } from '~/composables/ultimateProtocol'
+import type { MetaData } from '~/composables/ultimateProtocol'
+
+const meta: MetaData = {
+  base_url: 'panchoblanco.com',
+  title: 'Curriculum Vitae :: Pancho Blanco',
+  description:
           'Hola soy Pancho Blanco, un Desarrollador y Diseñador Grafico. Estas son mis habilidades y experiencias. Tengo mas de 4 años en la industria del desarrollo y tengo una pasion por enseñar y aprender.',
-      },
-    }
-  },
-  computed: {
-    ...mapState({
-      printMode: (state) => state.print_mode,
-    }),
-  },
-  methods: {
-    changeLang() {
-      const newLang = this.$i18n.locale === 'es' ? 'en' : 'es'
-      this.$i18n.locale = newLang
-    },
-    scrollToElement(ref, offset = 100) {
-      const element = this.$refs[ref]
-      this.$nextTick(() => {
-        const top = element.$el.offsetTop - offset
-        window.scrollTo(0, top)
-      })
-    },
-    backToTop() {
-      window.scrollTo(0, 0)
-    },
-  },
-  head() {
-    return this.ultimateProtocol(this.meta)
-  },
 }
+const genral_store = useGeneralStore()
+const { print_mode } = storeToRefs(genral_store)
+const { t, locale, availableLocales } = useI18n()
+const changeLang = () => {
+  console.log('ABIL', availableLocales)
+  if (locale.value === 'en')
+    locale.value = 'es'
+
+  else
+    locale.value = 'en'
+}
+
+const exp = ref(null)
+const study = ref(null)
+const scrollToElement = (ref: string, offset = 100) => {
+  let topValue = 0
+  if (ref === 'exp') {
+    console.log('exp', exp)
+    topValue = exp.value?.offsetTop - offset || 0
+  }
+  else { topValue = study.value?.offsetTop - offset || 0 }
+  window.scrollTo(0, topValue)
+}
+const backToTop = () => {
+  window.scrollTo(0, 0)
+}
+useHead(useUP(meta))
 </script>
 
 <style scoped>

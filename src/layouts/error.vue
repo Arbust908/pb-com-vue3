@@ -11,12 +11,12 @@
             <h2
               class="text-4xl font-bold leading-none text-gray-400 select-none lg:text-6xl"
             >
-              {{ error.statusCode || '' }}
+              {{ 'Error' }}
             </h2>
             <h3
               class="text-xl font-light leading-normal lg:text-3xl md:text-3xl"
             >
-              {{ error.message || '' }}
+              {{ 'Something went wrong' }}
             </h3>
           </header>
 
@@ -27,7 +27,7 @@
 
           <nuxt-link
             to="/"
-            class="inline px-4 py-2 text-sm font-medium leading-5 text-white uppercase transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg shadow focus:outline-none focus:shadow-outline-blue active:bg-blue-600 hover:bg-blue-700"
+            class="inline px-4 py-2 text-sm font-medium leading-5 text-white uppercase transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg shadow focus:outline-none focus:shadow-blue-500 active:bg-blue-600 hover:bg-blue-700"
           >
             Volver a la Home
           </nuxt-link>

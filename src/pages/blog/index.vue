@@ -4,65 +4,45 @@
       Blog Posts
     </h1>
     <section class="grid gap-4">
-      <nuxt-link
+      <router-link
         v-for="article of articles"
         :key="article.slug"
-        :to="{
-          name: 'blog-slug___es___default',
-          params: { slug: article.slug },
-        }"
+        :to="`/blog/`"
         class="rounded bg-blueGray-300 dark:bg-blueGray-700 hover:shadow-xl hover:bg-blueGray-400 dark:hover:bg-blueGray-600 transition transform hover:scale-105"
       >
-        <!-- <img
-          :src="smallImgSrc(article.img_small)"
-          class="h-24 w-full object-cover object-top rounded-t"
-        /> -->
         <div
           class="h-24 w-full bg-gradient-to-tl from-rose-500 to-violet-500 rounded-t"
-        ></div>
+        />
         <div class="p-3">
-          <h2 class="font-bold mb-2">{{ article.title }}</h2>
-          <p class="leading-none">{{ article.description }}</p>
+          <h2 class="font-bold mb-2">
+            {{ article.title }}
+          </h2>
+          <p class="leading-none">
+            {{ article.description }}
+          </p>
         </div>
-      </nuxt-link>
+      </router-link>
     </section>
   </main>
 </template>
 
-<script>
-import mediaCards from '@/mixins/media_cards'
+<script setup lang="ts">
+import type { MetaData } from '~/composables/ultimateProtocol'
+import { useUP } from '~/composables/ultimateProtocol'
 
-export default {
-  mixins: [mediaCards],
-  async asyncData({ $content, params }) {
-    const articles = await $content('articles', params.slug)
-      .only(['title', 'description', 'img_small', 'slug'])
-      .sortBy('createdAt', 'desc')
-      .fetch()
-
-    return {
-      articles,
-    }
-  },
-  data() {
-    return {
-      meta: {
-        url: 'panchoblanco.com/blog',
-        title: 'Blog :: Pancho Blanco',
-        description:
+const meta: MetaData = {
+  base_url: 'panchoblanco.com',
+  title: 'Blog :: Pancho Blanco',
+  description:
           'Un blog donde busco descargar mis conocimientos para compartir con mi amigo Diego y todo aquel que lo encuentre util!',
-      },
-    }
-  },
-  methods: {
-    smallImgSrc(src) {
-      return require(`~/assets/img/${src}`)
-    },
-  },
-  head() {
-    return this.ultimateProtocol(this.meta)
-  },
 }
+useHead(useUP(meta))
+interface ArticleCard {
+  title: string
+  description: string
+  slug: string
+}
+const articles = [{ title: 'Nuevo Sitio', description: 'Nuevamente empezamos con otro sitio con nueva tecnologia y mucha nuevas cosas', slug: 'nuevo_sitio' }] as ArticleCard[]
 </script>
 
 <style scoped>

@@ -4,17 +4,9 @@ export const useGeneralStore = defineStore('general', () => {
   const print_mode = ref(false)
   const togglePrintMode = useToggle(print_mode)
 
-  const activatePrintMode = () => {
-    togglePrintMode(true)
-  }
-  const deactivatePrintMode = () => {
-    togglePrintMode(false)
-  }
-
   return {
     print_mode,
-    activatePrintMode,
-    deactivatePrintMode,
+    togglePrintMode,
   }
 })
 

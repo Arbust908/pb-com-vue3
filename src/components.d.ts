@@ -4,9 +4,20 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AppSearchInput: typeof import('./components/AppSearchInput.vue')['default']
+    Author: typeof import('./components/Author.vue')['default']
+    ClassesCard: typeof import('./components/ClassesCard.vue')['default']
+    ClassesFeatured: typeof import('./components/ClassesFeatured.vue')['default']
+    ColorBox: typeof import('./components/ColorBox.vue')['default']
     Counter: typeof import('./components/Counter.vue')['default']
+    Experiences: typeof import('./components/Experiences.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
+    InfoBox: typeof import('./components/InfoBox.vue')['default']
+    Logo: typeof import('./components/Logo.vue')['default']
+    Personal: typeof import('./components/Personal.vue')['default']
+    PrevNext: typeof import('./components/PrevNext.vue')['default']
     README: typeof import('./components/README.md')['default']
+    Studies: typeof import('./components/Studies.vue')['default']
   }
 }
 

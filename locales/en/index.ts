@@ -1,9 +1,14 @@
-module.exports = {
+import exp from './exp'
+import languajes from './languajes'
+import skills from './skills'
+import study from './study'
+
+export default {
   lang: 'en',
-  exp: require('./exp'),
-  languajes: require('./languajes'),
-  skills: require('./skills'),
-  study: require('./study'),
+  exp,
+  languajes,
+  skills,
+  study,
   rol: 'Creative Developer',
   change_lang: 'Cambiar Idioma',
   exp_title: 'Experience',
@@ -14,4 +19,7 @@ module.exports = {
   see_less: 'less detail',
   print: 'Print',
   last_update: 'Last update',
+  avatar: {
+    desc: 'Photo of Pancho Blanco with a black and white filter',
+  },
 }

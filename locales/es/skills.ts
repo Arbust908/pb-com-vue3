@@ -1,14 +1,16 @@
-module.exports = [
-  {
+import { adobe, web } from '../skill-list'
+
+export default {
+  web: {
     title: 'Desarrollo Web',
-    list: require('../skill-list').web,
+    list: web,
   },
-  {
+  adobe: {
     title: 'Adobe Suite CC',
-    list: require('../skill-list').adobe,
+    list: adobe,
   },
-  {
+  other: {
     title: 'Otros',
     list: 'Fotografia, Edicion de Video, Unity & C#, Maya, 3DMax, ZBrush',
   },
-]
+}

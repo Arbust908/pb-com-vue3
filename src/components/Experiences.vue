@@ -1,88 +1,84 @@
 <template>
   <section>
-    <h2 class="text-3xl mb-2 ml-4">{{ $t('exp_title') }}</h2>
+    <h2 class="text-3xl mb-2 ml-4">
+      {{ t('exp_title') }}
+    </h2>
     <article
-      v-for="job in $t('exp')"
-      :key="job.rol + job.company"
+      v-for="job in exp_list"
+      :key="job"
       :class="
-        job.end === null ? 'border-violet-700 dark:border-violet-300' : null
+        t(`exp.${job}.end`) === 'null' ? 'border-violet-700 dark:border-violet-300' : null
       "
       class="mb-4 p-4 shadow border rounded dark:border-blueGray-700"
     >
       <h3
         class="font-bold flex flex-col sm:flex-row md:flex-col lg:flex-row mb-2"
       >
-        <span>{{ job.rol }}</span>
+        <span>{{ t(`exp.${job}.rol`) }}</span>
         <span class="hidden sm:inline md:hidden lg:inline px-2"> / </span>
-        <span> {{ job.company }} </span>
+        <span> {{ t(`exp.${job}.company`) }} </span>
       </h3>
       <div class="text-sm mb-2 leading-relaxed">
-        <span>{{ formatDate(job.start) }}</span> -
+        <span>{{ formatDate(t(`exp.${job}.start`)) }}</span> -
         <span
-          v-if="job.end === null"
+          v-if="t(`exp.${job}.end`) === 'null'"
           class="px-2 rounded font-bold bg-emerald-300 text-emerald-800"
-          >Actual</span
         >
-        <span v-else>{{ formatDate(job.end) }}</span>
+          Actual
+        </span>
+        <span v-else>{{ formatDate(t(`exp.${job}.end`)) }}</span>
       </div>
-      <p v-if="!printMode" class="font-light">
+      <p v-if="!print_mode" class="font-light">
         <span
-          v-if="detailShown.includes(job.rol + job.company)"
-          :key="`${job.company}-detail`"
-          v-html="job.more || ''"
+          v-if="detail_shown.includes(job)"
+          :key="`${job}-detail`"
+          v-html="t(`exp.${job}.more`) || ''"
         />
-        <span v-else :key="`${job.company}-description`">
-          {{ job.description }}
+        <span v-else :key="`${job}-description`">
+          {{ t(`exp.${job}.description`) }}
         </span>
       </p>
-      <template v-if="printMode">
+      <template v-if="print_mode">
         <p>
-          <span v-html="job.more || job.description"></span>
+          <span v-html="t(`exp.${job}.more`) || t(`exp.${job}.description`)" />
         </p>
       </template>
       <aside class="mt-2 flex justify-end">
         <button
-          v-if="job.more"
-          :class="printMode ? 'opacity-0' : null"
+          v-if="t(`exp.${job}.more`) !== 'null'"
+          :class="print_mode ? 'opacity-0' : null"
           class="text-sm px-2 py-1 rounded transition duration-150 ease-out transform hover:bg-emerald-400 hover:text-emerald-700 hover:-translate-y-1"
-          @click="addDetail(job.rol + job.company)"
+          @click="addDetail(job)"
         >
           {{
-            detailShown.includes(job.rol + job.company)
-              ? $t('see_less')
-              : $t('see_more')
+            detail_shown.includes(job)
+              ? t('see_less')
+              : t('see_more')
           }}
         </button>
       </aside>
     </article>
   </section>
 </template>
-<script>
-import { mapState } from 'vuex'
-export default {
-  data() {
-    return {
-      detailShown: [],
-    }
-  },
-  computed: {
-    ...mapState({
-      printMode: (state) => state.print_mode,
-    }),
-  },
-  methods: {
-    formatDate(date) {
-      const options = { year: 'numeric', month: 'short', day: '2-digit' }
-      return new Date(date).toLocaleDateString(this.$i18n.locale, options)
-    },
-    addDetail(job) {
-      const isInDetails = this.detailShown.includes(job)
-      if (isInDetails) {
-        this.detailShown = this.detailShown.filter((title) => title !== job)
-      } else {
-        this.detailShown.push(job)
-      }
-    },
-  },
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useGeneralStore } from '~/stores'
+
+const { t, locale } = useI18n()
+const general_store = useGeneralStore()
+const { print_mode } = storeToRefs(general_store)
+
+const exp_list = ['bitpatagonia', 'viafoura', 'forian', 'pointmore', 'digitalhouse_dev', 'digitalhouse', 'netdreams', 'musculocreativo', 'mindset']
+const detail_shown = ref([] as string[])
+const formatDate = (date: string) => {
+  return new Date(date).toLocaleDateString(locale.value, { year: 'numeric', month: 'short', day: '2-digit' })
+}
+const addDetail = (job: string) => {
+  const isInDetails = detail_shown.value.includes(job)
+  if (isInDetails)
+    detail_shown.value = detail_shown.value.filter(title => title !== job)
+
+  else
+    detail_shown.value.push(job)
 }
 </script>
